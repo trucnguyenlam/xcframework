@@ -126,7 +126,7 @@ pub mod ext;
 use crate::conf::Configuration;
 use anyhow::{Context, Result};
 use camino::Utf8PathBuf;
-use cmd::{cargo, lipo, rustup, xcodebuild, zip};
+use cmd::{cargo, lipo, xcodebuild, zip};
 pub use conf::{XCFrameworkConfiguration, XcCli};
 use ext::PathBufExt;
 
@@ -144,7 +144,6 @@ pub fn build(cli: XcCli) -> Result<Produced> {
         .remove_dir_all_if_exists()
         .context("cleaning build dir")?;
 
-    rustup::check_needed(&conf).context("checking rustup targets")?;
     cargo::build(&conf).context("running cargo build")?;
 
     let libs = lipo::assemble_libs(&conf).context("lipo: assembling libraries")?;
